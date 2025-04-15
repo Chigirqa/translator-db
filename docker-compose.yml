@@ -1,34 +1,29 @@
-version: "3.8"
+version: '3.8'
 
 services:
   db:
     image: postgres:15
-    ports:
-      - "5432:5432"
-    env_file:
-      - .env
-    volumes:
-      - translator-db:/var/lib/postgresql/data
+    container_name: postgres-db
+    restart: always
     environment:
       POSTGRES_DB: ${DB_DATABASE}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    expose:
-      - 5432
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   migrations:
-    image: flyway/flyway
+    image: flyway/flyway:11.7.1
+    command: -url=jdbc:postgresql://db:5432/${DB_DATABASE} -user=${DB_USERNAME} -password=${DB_PASSWORD} migrate
+    depends_on:
+      db:
+        condition: service_healthy
     volumes:
       - ./migrations/db:/flyway/sql
-    command: migrate
     env_file:
       - .env
-    environment:
-      FLYWAY_URL: jdbc:postgresql://${DB_HOST}:5432/${DB_DATABASE}
-      FLYWAY_USER: ${DB_USERNAME}
-      FLYWAY_PASSWORD: ${DB_PASSWORD}
-      FLYWAY_DEFAULT_SCHEMA: ${DB_SCHEMA}
-    depends_on:
-      - db
-
-volumes:
