@@ -27,4 +27,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: oleg91853/translator_project:latest
+          tags: chigirq/translator_project:latest
+
+
