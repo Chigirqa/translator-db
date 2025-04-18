@@ -3,7 +3,7 @@ name: Build and Push Docker image
 on:
   push:
     branches:
-      - main  # Выполняется при пуше в ветку main
+      - main
 
 jobs:
   build-and-push:
@@ -26,6 +26,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: ./Dockerfile
           push: true
-          tags: chigirq/translator_project:latest
+          tags: dmitrobrovko/translator_project:latest
