@@ -1,0 +1,14 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "translator_db",
+            "group": "local",
+            "database": "translator_db",
+            "username": "admin"
+        }
+    ]
+}
